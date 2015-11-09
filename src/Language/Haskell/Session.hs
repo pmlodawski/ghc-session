@@ -1,7 +1,9 @@
 module Language.Haskell.Session (
-    module X
+    module Language.Haskell.Session.Session,
+    module Language.Haskell.Session.Binding,
+    module Language.Haskell.Session.Hint.Typecheck,
 ) where
 
-import Language.Haskell.Session.Binding        as X
-import Language.Haskell.Session.Hint.Typecheck as X
-import Language.Haskell.Session.Session        as X
+import Language.Haskell.Session.Binding
+import Language.Haskell.Session.Hint.Typecheck
+import Language.Haskell.Session.Session

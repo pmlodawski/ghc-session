@@ -1,5 +1,5 @@
 name:                ghc-session
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Simplified GHC API
 description:         Simplified GHC API
 license:             MIT

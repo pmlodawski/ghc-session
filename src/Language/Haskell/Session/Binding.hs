@@ -1,5 +1,6 @@
 module Language.Haskell.Session.Binding (
-    removeBinding
+    getBindings,
+    removeBinding,
 ) where
 
 import qualified Data.List as List
@@ -23,6 +24,7 @@ dropDot :: String -> String
 dropDot = reverse . List.takeWhile (/= '.') . reverse
 
 
+-- | Remove bound variable and release memory
 removeBinding :: GhcMonad m => String -> m ()
 removeBinding name = do
     dflags <- GHC.getSessionDynFlags
@@ -37,6 +39,7 @@ getIcTythings = do
     return $ HscTypes.ic_tythings $ HscTypes.hsc_IC hscEnv
 
 
+-- | Get list of bound variables
 getBindings :: GhcMonad m => m [String]
 getBindings = do
     dflags <- GHC.getSessionDynFlags
