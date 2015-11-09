@@ -3,6 +3,7 @@ module Language.Haskell.Session.Binding (
     removeBinding,
 ) where
 
+import           Control.Applicative ((<$>))
 import qualified Data.List as List
 import qualified GHC
 import           GhcMonad  (GhcMonad)
