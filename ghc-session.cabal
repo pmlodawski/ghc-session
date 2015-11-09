@@ -5,7 +5,7 @@ description:         Simplified GHC API
 license:             MIT
 license-file:        LICENSE
 author:              Piotr Młodawski
-maintainer:          remdezx+github@gmail.com
+maintainer:          Piotr Młodawski <remdezx+github@gmail.com>
 homepage:            http://github.com/pmlodawski/ghc-session
 bug-reports:         http://github.com/pmlodawski/ghc-session/issues
 category:            Language
