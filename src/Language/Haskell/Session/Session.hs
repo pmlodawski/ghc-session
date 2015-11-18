@@ -1,14 +1,14 @@
 module Language.Haskell.Session.Session (
     -- * Session
+    Session,
     run,
-    initialize,
     runWith,
-    initializeWith,
 
     -- * Flags
     setStrFlags,
 
     -- * Imports
+    Import,
     setImports,
     withImports,
 

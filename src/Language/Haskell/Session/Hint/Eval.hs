@@ -1,13 +1,8 @@
----------------------------------------------------------------------------
--- Copyright (C) Flowbox, Inc - All Rights Reserved
--- Flowbox Team <contact@flowbox.io>, 2014
--- Proprietary and confidential
--- Unauthorized copying of this file, via any medium is strictly prohibited
----------------------------------------------------------------------------
 {-# LANGUAGE MagicHash #-}
 
 module Language.Haskell.Session.Hint.Eval (
-    interpret
+    interpret,
+    interpretTyped,
 ) where
 
 import           Data.Typeable (Typeable)
@@ -27,15 +22,16 @@ interpret expr = interpret' expr wit where
 
 -- | Evaluates an expression, given a witness for its monomorphic type.
 interpret' :: (GHC.GhcMonad m, Typeable a) => String -> a -> m a
-interpret' expr wit = interpret'' expr typeStr where
+interpret' expr wit = interpretTyped expr typeStr where
     typeStr = show $ Typeable.typeOf wit
 
 
-interpret'' :: (GHC.GhcMonad m, Typeable a) => String -> String -> m a
-interpret'' expr typeStr = do
+interpretTyped :: GHC.GhcMonad m => String -> String -> m a
+interpretTyped expr typeStr = do
     let typedExpr = concat [parens expr, " :: ", typeStr]
     exprVal <- GHC.compileExpr typedExpr
     return (Exts.unsafeCoerce# exprVal :: a)
+
 
 -- | Conceptually, @parens s = \"(\" ++ s ++ \")\"@, where s is any valid haskell
 -- expression. In practice, it is harder than this.
