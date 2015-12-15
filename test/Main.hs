@@ -1,10 +1,10 @@
 module Main where
 
+import           Control.Monad.IO.Class   (liftIO)
 import qualified Language.Haskell.Session as Session
-import Control.Monad.IO.Class (liftIO)
 
 
-
+main :: IO ()
 main = Session.run $ do
     Session.setImports ["Prelude"]
     Session.runAssignment "x" "5"
