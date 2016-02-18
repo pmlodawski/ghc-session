@@ -59,18 +59,18 @@ type Import = String
 -- Session
 --------------------------------------------------------------------------------
 
--- | Run session with default config.
+-- | Run a session with default config.
 run :: (MGHC.MonadIO m, Catch.MonadMask m, Functor m) => MGHC.GhcT m a -> m a
 run session = MGHC.runGhcT (Just Paths.libdir) $ initialize >> session
 
 
--- | Run session with custom GHC config.
+-- | Run a session with custom GHC config.
 runWith :: Config -> MGHC.Ghc a -> IO a
 runWith config session = MGHC.runGhc (Just $ Config.topDir config)
                        $ initializeWith config >> session
 
 
--- | Initialize session with custom GHC config.
+-- | Initialize a session with custom GHC config.
 initializeWith :: GhcMonad m => Config -> m ()
 initializeWith config = do
     initialize
@@ -87,7 +87,7 @@ initializeWith config = do
                 --, GHC.verbosity = 4
                 }
 
--- | Initialize session with default config.
+-- | Initialize a session with default config.
 initialize :: GhcMonad m => m ()
 initialize = do
     setStrFlags ["-fno-ghci-sandbox"]
@@ -160,7 +160,7 @@ withExtensionFlags enable disable action = sandboxDynFlags $ do
 -- Expression evaluation
 --------------------------------------------------------------------------------
 
--- | Run statement as in ghci.
+-- | Run a statement as in ghci.
 runStmt :: (Catch.MonadCatch m, GhcMonad m) => String -> m ()
 runStmt stmt = do
     result <- interceptErrors $ GHC.runStmtWithLocation location 1 stmt GHC.RunToCompletion
@@ -169,27 +169,27 @@ runStmt stmt = do
         GHC.RunException ex -> fail $ "runStmt : " ++ show ex
         GHC.RunBreak {}     -> fail $ "runStmt : RunBreak"
 
--- | Run declaration as in Haskell source file.
+-- | Run declarations as in Haskell source file.
 runDecls :: (Catch.MonadCatch m, GhcMonad m) => String -> m ()
 runDecls decls = do
     void $ interceptErrors $ GHC.runDeclsWithLocation location 1 decls
 
 
--- | Bind expression do a variable using `let` syntax.
+-- | Bind an expression to a variable using `let` syntax.
 runAssignment :: (Catch.MonadCatch m, GhcMonad m) => String -> String -> m ()
 runAssignment asigned asignee = do
     Binding.removeBinding asigned
     -- do not use runDecls here: its bindings are hard to remove and cause memory leaks!
     runStmt $ "let " ++ asigned ++ " = " ++ asignee
 
--- | Bind expression to a variable using `bind` syntax. Expression must have type `IO a`.
+-- | Bind an expression to a variable using `bind` syntax. Expression must have type `IO a`.
 runAssignment' :: (Catch.MonadCatch m, GhcMonad m) => String -> String -> m ()
 runAssignment' asigned asignee = do
     Binding.removeBinding asigned
     runStmt $ asigned ++ " <- " ++ asignee
 
 
--- | Evaluate expression.
+-- | Evaluate an expression.
 interpret :: (Catch.MonadCatch m, GhcMonad m) => Typeable a => String -> m a
 interpret = interceptErrors . HEval.interpret
 
@@ -202,7 +202,7 @@ sandboxDynFlags :: (Catch.MonadMask m, GhcMonad m) => m a -> m a
 sandboxDynFlags = bracket GHC.getSessionDynFlags GHC.setSessionDynFlags . const
 
 
--- | Run a code which can safely modify Context w- it  will be restored on exit.
+-- | Run a code which can safely modify Context - it  will be restored on exit.
 sandboxContext :: (Catch.MonadMask m, GhcMonad m) => m a -> m a
 sandboxContext = bracket GHC.getContext GHC.setContext . const
 
